@@ -16,7 +16,7 @@ transpose(int size, int matrix[size][size]) //(int **matrix, int size)
 	{
 		for (j = i; j < size; ++j)
 		{
-			// swipe the values [i][j] and [j][i]
+			// swap the values [i][j] and [j][i]
 			int t = matrix[i][j];
 			matrix[i][j] = matrix[j][i];
 			matrix[j][i] = t;
