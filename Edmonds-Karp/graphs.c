@@ -103,43 +103,73 @@ EdmondsKarp(int size,
 			int Graph[size][size],
 			int s, int t)
 {
+	int pred[size];
+
+	for(int i = 0; i < size; ++i)
+		pred[i] = -1;
+
 	int flow = 0;
-
-	// initialize queue of size of number of vertices
-	queue Q = { size + 1, 0, 0, 0 }, 
-	*q = &Q;
-
-	int temp[size];
-	q->items = temp;
-
-	push(q, s);
-
-	struct edges
+	do
 	{
-		int s;
-		int t;
-	} pred[size];
+		// initialize queue of size of number of vertices
+		queue Q = { size, 0, 0, 0 }; // size + 1
+		queue *q = &Q;
 
-	while(qStart != qEnd)
-	{
-		int cur = pop(q);
+		int temp[size];
+		q->items = temp;
 
-		// for every neighbor
-		int i;
-		for (i = 0; i < size; ++i)
+		push(q, s);
+
+	/*	struct edges
 		{
-			if (Graph[cur][i] != 0 
-				&& pred[]) // if such an edge exists
+			int s = -1;
+			int t = -1;
+		} pred[size];*/
+
+
+		//memset(pred, 0, sizeof(struct edges) * size);
+		// pred[v] - edge taken to get to vertex v (can use node taken to get there)
+		// while q is not empty
+		while(qStart != qEnd)
+		{
+			int cur = pop(q);
+
+			// for every neighbor to cur
+			for (int i = 0; i < size; ++i)
 			{
-				
-
-
-				push(q, e.t)
+				if (Graph[cur][i] != 0 
+					&& pred[i] == -1
+					&& i != curr
+					&& cap[cur][i] > flow[cur][i]) // if such an edge exists
+				{
+					pred[i] = cur;
+					push(q, e.t);
+				}
 			}
 		}
+
+		if(pred[t] != -1)
+		{
+			int df = INT_MAX;
+			int end = t;
+			for(int e = pred[t]; e != -1; e = pred[e])
+			{
+				df = min(df, cap[e][end] > flow[e][end]);
+				end = e;
+			}
+
+			end = t;
+			for(int e = pred[t]; e != -1; e = pred[e])
+			{
+				flow[e][end] += df;
+				flow[end][e] -= df; // reverse flows kept on opposite connections in same graph
+
+			}
+			
+			flow += df;
+		}
 	}
-
-
+	while(pred[t] != -1);
 
 	return flow;
 }

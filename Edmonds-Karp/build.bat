@@ -1,2 +1,2 @@
 @echo off
-gcc graphs.c main.c -o out
+gcc -std=c99 graphs.c main.c -o out

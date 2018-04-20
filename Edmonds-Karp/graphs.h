@@ -2,9 +2,12 @@
 #define GRAPHS_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 // creating G^R is the same as transposing a graph's adjacency matix
 #define reverse(a,b) transpose(a,b)
+#define min(a,b) (a>b?b:a)
 
 void transpose(int size, int matrix[size][size]);
 
