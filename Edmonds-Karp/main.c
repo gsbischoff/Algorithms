@@ -33,11 +33,37 @@ main(int argc, char const *argv[])
 		{ 0 , 0 , 0 , 0 }
 	};
 
+	int caps[4][4] = 
+	{
+		{ 0 , 2 , 1 , 0 },
+		{ 0 , 0 , 0 , 2 },
+		{ 0 , 0 , 0 , 1 },
+		{ 0 , 0 , 0 , 0 }
+	};
+
+	int e[2][2] =
+	{
+		{ 0, 1 },
+		{ 0, 0 }
+	};
+
+	int c[2][2] =
+	{
+		{ 0, 2 },
+		{ 0, 0 }
+	};
+
+	print(4, edge);
+
+/*	transpose(4, edge);
+
 	print(4, edge);
 
 	transpose(4, edge);
+*/
+	int flow = EdmondsKarp(2, e, c, 0, 1);
 
-	print(4, edge);
+	printf("Flow is %d\n", flow);
 /*
 	queue q = 
 	{

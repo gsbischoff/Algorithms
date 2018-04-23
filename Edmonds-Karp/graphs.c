@@ -1,3 +1,5 @@
+#include "graphs.h"
+
 #define qStart q->startpos
 #define qEnd q->endpos 
 #define qSize q->size
@@ -37,11 +39,7 @@ print(int size, int matrix[size][size])
 	}
 }
 
-// -----
-//  Simple messy queue
-//  	Uses an array, keeps track of start and end to know where 
-//				to add/pop allows for (size - 1) elements
-
+/*
 typedef struct
 {
 	int size;
@@ -49,7 +47,7 @@ typedef struct
 	int startpos;
 	int endpos;
 } queue;
-
+*/
 void
 push(queue *q, int item)
 {
@@ -101,9 +99,14 @@ printQueue(queue *q)
 int
 EdmondsKarp(int size,
 			int Graph[size][size],
+			int cap[size][size],
 			int s, int t)
 {
 	int pred[size];
+	int flows[size][size];
+
+	memset(pred, 0, size * sizeof(int));
+	memset(flows, 0, size * size * sizeof(int));
 
 	for(int i = 0; i < size; ++i)
 		pred[i] = -1;
@@ -118,6 +121,8 @@ EdmondsKarp(int size,
 		int temp[size];
 		q->items = temp;
 
+		//memset(temp, 0, sizeof(int) * size);
+
 		push(q, s);
 
 	/*	struct edges
@@ -128,10 +133,13 @@ EdmondsKarp(int size,
 
 
 		//memset(pred, 0, sizeof(struct edges) * size);
+
 		// pred[v] - edge taken to get to vertex v (can use node taken to get there)
 		// while q is not empty
 		while(qStart != qEnd)
 		{
+			printQueue(q);
+
 			int cur = pop(q);
 
 			// for every neighbor to cur
@@ -139,14 +147,16 @@ EdmondsKarp(int size,
 			{
 				if (Graph[cur][i] != 0 
 					&& pred[i] == -1
-					&& i != curr
-					&& cap[cur][i] > flow[cur][i]) // if such an edge exists
+					&& i != cur
+					&& cap[cur][i] > flows[cur][i]) // if such an edge exists
 				{
 					pred[i] = cur;
-					push(q, e.t);
+					push(q, i);
 				}
 			}
 		}
+
+		printf("HERE\n");
 
 		if(pred[t] != -1)
 		{
@@ -154,18 +164,18 @@ EdmondsKarp(int size,
 			int end = t;
 			for(int e = pred[t]; e != -1; e = pred[e])
 			{
-				df = min(df, cap[e][end] > flow[e][end]);
+				df = min(df, cap[e][end] - flows[e][end]);
 				end = e;
 			}
 
 			end = t;
 			for(int e = pred[t]; e != -1; e = pred[e])
 			{
-				flow[e][end] += df;
-				flow[end][e] -= df; // reverse flows kept on opposite connections in same graph
+				flows[e][end] += df;
+				flows[end][e] -= df; // reverse flows kept on opposite connections in same graph
 
 			}
-			
+
 			flow += df;
 		}
 	}
