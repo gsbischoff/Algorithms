@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#define DEBUG 0
+
 // creating G^R is the same as transposing a graph's adjacency matix
 #define reverse(a,b) transpose(a,b)
 #define min(a,b) (a>b?b:a)
@@ -35,7 +37,6 @@ void printQueue(queue *q);
 
 int EdmondsKarp(int size,
 			int Graph[size][size],
-			int cap[size][size],
 			int s, int t);
 
 #endif
