@@ -56,22 +56,9 @@ main(int argc, char const *argv[])
 	for(int i = 1; i <= g; ++i)
 		Graph[i + (l + m + c)][t] = 1;
 
-	//print(size, Graph);
+	print(size, Graph);
 
-	//int flow = EdmondsKarp(size, Graph, s, t);
-
-	//printf("Max Flow is %d.\n", flow);
-
-	//int sz = 3;
-
-	int ed[3][3] =
-	{
-		{ 0, 4, 2 },
-		{ 0, 1, 0 },
-		{ 0, 0, 0 }
-	};
-
-	int flow = EdmondsKarp(3, ed, 0, 2);
+	int flow = EdmondsKarp(size, Graph, s, t);
 
 	printf("Max Flow is %d.\n", flow);
 
