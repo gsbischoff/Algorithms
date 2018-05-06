@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#define DEBUG 0
+#define DEBUG 1
 
 // creating G^R is the same as transposing a graph's adjacency matix
 #define reverse(a,b) transpose(a,b)

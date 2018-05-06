@@ -28,16 +28,13 @@ main(int argc, char const *argv[])
 		return(1);
 	}
 
-	char buf[30] = { 0 };
-	int l, m, c, g;
+	char buf[30];
+	int l, m, c, g;	
 
-	
+	if(fgets(buf, 30, input))
+		sscanf(buf, "%d %d %d %d", &l, &m, &c, &g);
 
-	fgets(buf, 30, input);
-
-	sscanf(buf, "%d %d %d %d", &l, &m, &c, &g);
-
-	// Graph will need l + m + c + g + 2 (for s & t)
+	// Graph will need l + m + c + g + 2 (for s & t) vetices
 	int size = l + m + c + g + 2;
 
 	int Graph[size][size];
@@ -61,7 +58,20 @@ main(int argc, char const *argv[])
 
 	//print(size, Graph);
 
-	int flow = EdmondsKarp(size, Graph, s, t);
+	//int flow = EdmondsKarp(size, Graph, s, t);
+
+	//printf("Max Flow is %d.\n", flow);
+
+	//int sz = 3;
+
+	int ed[3][3] =
+	{
+		{ 0, 4, 2 },
+		{ 0, 1, 0 },
+		{ 0, 0, 0 }
+	};
+
+	int flow = EdmondsKarp(3, ed, 0, 2);
 
 	printf("Max Flow is %d.\n", flow);
 
@@ -91,20 +101,16 @@ parseComponentEdges(int size,
 
 			int parts = atoi(token);
 
-			//printf("shell: %d, num: %d ... ", partnum, parts);
-
 			// Read in those values and make them edges in the graph
 			for(int j = 0; j < parts; ++j)
 			{
 				token = strtok(NULL, " \t");
 
 				int p = atoi(token);
-				//printf("%d ", p);
 
 				Graph[offset + partnum][offset + num + p] = 1;
 			}
 		}
-		//putc('\n',stdout);
 	}
 }
 

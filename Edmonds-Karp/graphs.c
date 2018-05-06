@@ -104,7 +104,7 @@ EdmondsKarp(int size,
 
 		for(int i = 0; i < size; ++i)
 			pred[i] = -1;
-			
+
 		#if DEBUG
 		for(int i = 0; i < size; ++i) printf("\tpred[%d] = %d\n", i, pred[i]);
 		#endif
@@ -149,10 +149,6 @@ EdmondsKarp(int size,
 
 		if(pred[t] != -1)
 		{
-			#if DEBUG
-			printf("In if\n");
-			#endif
-
 			int df = INT_MAX;
 			int end = t;
 			for(int e = pred[t]; e != -1; e = pred[e])
@@ -171,7 +167,7 @@ EdmondsKarp(int size,
 
 			flow += df;
 			#if DEBUG
-			printf("Flow: %d\n", flow);
+			printf("Flow: %d\n\n", flow);
 			#endif
 		}
 	}
