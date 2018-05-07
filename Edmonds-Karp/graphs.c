@@ -38,6 +38,7 @@ print(int size, int matrix[size][size])
 		for (j = 0; j < size; ++j)
 			printf("%d ", matrix[i][j]);
 	}
+	printf("\n");
 }
 
 void
@@ -80,6 +81,20 @@ printQueue(queue *q)
 	printf("\n");
 }
 
+void
+printPredPath(int size, int pred[size])
+{
+	printf("\t\t-- ");
+	int t = size - 1;
+	while(pred[t] != -1)
+	{
+		printf("%d ", t);
+
+		t = pred[t];
+	}
+	printf("\n");
+}
+
 // -----
 //  Edmonds-Karp max flow algorithm
 //
@@ -105,10 +120,6 @@ EdmondsKarp(int size,
 		for(int i = 0; i < size; ++i)
 			pred[i] = -1;
 
-		#if DEBUG
-		for(int i = 0; i < size; ++i) printf("\tpred[%d] = %d\n", i, pred[i]);
-		#endif
-			
 		// initialize queue of size of number of vertices
 		queue Q = { size, 0, 0, 0 }; // size + 1
 		queue *q = &Q;
@@ -144,7 +155,7 @@ EdmondsKarp(int size,
 		}
 		#if DEBUG
 		printf("Finished BFS!\n\n");
-		for(int i = 0; i < size; ++i) printf("\tpred[%d] = %d\n", i, pred[i]);
+		//for(int i = 0; i < size; ++i) printf("\tpred[%d] = %d\n", i, pred[i]);
 		#endif
 
 		if(pred[t] != -1)
@@ -163,15 +174,21 @@ EdmondsKarp(int size,
 			{
 				flows[e][end] += df;
 				flows[end][e] -= df; // reverse flows kept on opposite connections in same graph
+				end = e;
 			}
 
 			flow += df;
 			#if DEBUG
+			printPredPath(size, pred);
 			printf("Flow: %d\n\n", flow);
 			#endif
 		}
 	}
 	while(pred[t] != -1);
+
+	#if DEBUG
+			print(size, flows);
+	#endif
 
 	return flow;
 }
