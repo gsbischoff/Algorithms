@@ -11,7 +11,7 @@
 //		Takes a square matrix and it's size as inputs
 //			and transposes the matrix in-place
 void
-transpose(int size, int matrix[size][size]) //(int **matrix, int size)
+transpose(int size, int matrix[size][size])
 {
 	int i, j;
 
@@ -81,20 +81,6 @@ printQueue(queue *q)
 	printf("\n");
 }
 
-void
-printPredPath(int size, int pred[size])
-{
-	printf("\t\t-- ");
-	int t = size - 1;
-	while(pred[t] != -1)
-	{
-		printf("%d ", t);
-
-		t = pred[t];
-	}
-	printf("\n");
-}
-
 // -----
 //  Edmonds-Karp max flow algorithm
 //
@@ -133,11 +119,6 @@ EdmondsKarp(int size,
 		// while q is not empty
 		while(qStart != qEnd)
 		{
-			#if DEBUG
-			printf("\t");
-			printQueue(q);
-			#endif
-
 			int cur = pop(q);
 
 			// for every neighbor to cur
@@ -147,16 +128,12 @@ EdmondsKarp(int size,
 					&& pred[i] == -1
 					&& i != cur
 					&& Graph[cur][i] > flows[cur][i]) // if such an edge exists
-				{ //&& cap[cur][i] > flows[cur][i]
+				{
 					pred[i] = cur;
 					push(q, i);
 				}
 			}
 		}
-		#if DEBUG
-		printf("Finished BFS!\n\n");
-		//for(int i = 0; i < size; ++i) printf("\tpred[%d] = %d\n", i, pred[i]);
-		#endif
 
 		if(pred[t] != -1)
 		{
@@ -164,7 +141,6 @@ EdmondsKarp(int size,
 			int end = t;
 			for(int e = pred[t]; e != -1; e = pred[e])
 			{
-				//df = min(df, cap[e][end] - flows[e][end]);
 				df = min(df, Graph[e][end] - flows[e][end]);
 				end = e;
 			}
@@ -178,17 +154,9 @@ EdmondsKarp(int size,
 			}
 
 			flow += df;
-			#if DEBUG
-			printPredPath(size, pred);
-			printf("Flow: %d\n\n", flow);
-			#endif
 		}
 	}
 	while(pred[t] != -1);
-
-	#if DEBUG
-			print(size, flows);
-	#endif
 
 	return flow;
 }

@@ -1,6 +1,8 @@
 // -----
 //  main.c
 //  	Tests an implementation of Edmonds-Karp from graphs.h
+//
+//			by Greg B
 
 #include "graphs.h"
 
@@ -34,8 +36,10 @@ main(int argc, char const *argv[])
 	if(fgets(buf, 30, input))
 		sscanf(buf, "%d %d %d %d", &l, &m, &c, &g);
 
-	// Graph will need l + m + c + g + 2 (for s & t) vetices
-	int size = l + m + c + g + 2;
+	// Graph will need 2*(l + m + c + g) + 2
+	//	Each part will need an edge restricting it to be used only once, so
+	//	2 node for each part; and 2 additional points for source & sink
+	int size = 2*(l + m + c + g) + 2;
 
 	int Graph[size][size];
 	memset(Graph, 0, size * size * sizeof(int));
@@ -54,9 +58,7 @@ main(int argc, char const *argv[])
 		Graph[s][i] = 1;
 
 	for(int i = 1; i <= g; ++i)
-		Graph[i + (l + m + c)][t] = 1;
-
-	print(size, Graph);
+		Graph[i + 2*(l + m + c)][t] = 1;
 
 	int flow = EdmondsKarp(size, Graph, s, t);
 
@@ -77,25 +79,27 @@ parseComponentEdges(int size,
 	{
 		if(fgets(buf, 30, input))
 		{
-			// Get component number
 			char *token;
-			token = strtok(buf, " \t");
 
+			// Get component number
+			token = strtok(buf, " \t");
 			int partnum = atoi(token);
 
 			// Get number of compatible parts
 			token = strtok(NULL, " \t");
+			int compatibleParts = atoi(token);
 
-			int parts = atoi(token);
+			// Connect the two nodes representing this part together, making it only selectable once 
+			Graph[2*offset + partnum][2*offset + partnum + num] = 1;
 
-			// Read in those values and make them edges in the graph
-			for(int j = 0; j < parts; ++j)
+			// Read in values of compatible parts and connect them
+			for(int j = 0; j < compatibleParts; ++j)
 			{
 				token = strtok(NULL, " \t");
-
 				int p = atoi(token);
 
-				Graph[offset + partnum][offset + num + p] = 1;
+				// Connect this part's second vertex to all parts it is compatible with (p of the following group)
+				Graph[2*offset + partnum + num][2*(offset + num) + p] = 1;
 			}
 		}
 	}
